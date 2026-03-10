@@ -20,16 +20,17 @@ This document describes how to deploy the `lges-mem0ai-go` server as a standalon
 
 2. **Deploy the Services**:
 
-   Run the `run_prod.sh` script to build and start the services on host.
+   The project is delivered as a **pre-built standalone package** for Ubuntu 22.04. No internet connection or build tools are required on the production server.
+
+   Run the `run_prod.sh` script to start the services on host.
 
    ```bash
-   chmod +x *.sh
+   chmod +x *.sh ./server
    ./run_prod.sh
    ```
 
    This will:
-   - Build the Go application binary on the host.
-   - Reconstitute models if they were split.
+   - Verify the pre-built `server` binary and `.env`.
    - Run the `lges-mem0ai-go` server in the background using SQLite for both data and vector storage.
 
 ## Managing the Application

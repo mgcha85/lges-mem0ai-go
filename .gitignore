@@ -14,10 +14,12 @@ data/
 # OS
 .DS_Store
 
+# OS
+.DS_Store
+
 # Large assets
 release/
 qdrant_data/
 models/
-server
 server.pid
 server.log
