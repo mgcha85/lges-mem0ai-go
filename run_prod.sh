@@ -16,11 +16,13 @@ fi
 # Ensure SQLite is used as the default for offline standalone (no external services)
 sed -i 's/VECTORDB_PROVIDER=qdrant/VECTORDB_PROVIDER=sqlite/' .env || true
 
-# 2. Check for Pre-built Binary
+# 2. Pre-built Verification
 if [ ! -f "./server" ]; then
-    echo "Error: Pre-built 'server' binary not found. This project should be deployed as a pre-built package."
-    exit 1
+    echo "Pre-built binary not found. Attempting to build from vendor..."
+    export LD_LIBRARY_PATH=$(pwd)/lib
+    go build -mod=vendor -o server ./cmd/server/
 fi
+chmod +x ./server
 
 # 3. Handle models if split/missing (Robustness)
 if [ ! -d "models" ] && [ -f "models.tar.gz.part_aa" ]; then
