@@ -1,6 +1,6 @@
 # Binaries
 lges-mem0ai-go
-server
+# server
 
 # Environment
 .env
