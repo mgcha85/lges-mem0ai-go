@@ -1,0 +1,5 @@
+2026/03/10 15:11:28 main.go:20: === lges-mem0ai-go Server ===
+2026/03/10 15:11:28 main.go:39: Config: Model=deepseek-chat, VectorDB=sqlite, Port=8080
+2026/03/10 15:11:28 main.go:48: Database initialized: /mnt/data/projects/lges-mem0ai-go/data/mem0.db
+2026/03/10 15:11:29 service.go:79: [MemoryService] Initialized (LLM: deepseek-chat, Embedder: onnx, VectorDB: sqlite)
+2026/03/10 15:11:29 main.go:81: Server starting on http://0.0.0.0:8080
