@@ -1,1 +1,0 @@
-./run_prod.sh

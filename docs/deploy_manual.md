@@ -28,28 +28,29 @@ This document describes how to deploy the `lges-mem0ai-go` server as a standalon
 
 3. **Deploy the Services**:
 
-   Run the `start.sh` or `run_prod.sh` script to build and start the containers.
+   Run the `run_prod.sh` script to build and start the services.
 
    ```bash
    chmod +x *.sh
-   ./start.sh
+   ./run_prod.sh
    ```
 
    This will:
-   - Build the Go application container using the provided `Dockerfile`.
-   - Start the `server` and `qdrant` services in the background.
+   - Start the Qdrant service using `podman`.
+   - Build the Go application binary on the host.
+   - Run the `lges-mem0ai-go` server in the background.
 
 ## Managing the Application
 
-- **Check Status**: `podman-compose ps`
-- **View Logs**: `podman-compose logs -f`
+- **Check Status**: `ps aux | grep server`
+- **View Logs**: `tail -f server.log`
 - **Stop Services**: `./stop.sh`
-- **Development Run**: `./run_dev.sh` (runs locally without containers)
+- **Development Run**: `./run_dev.sh` (runs locally in foreground)
 
 ## Data Persistence
 
-- **SQLite Database**: Stored in `./data/vector.db` (or as configured in `.env`).
-- **Qdrant Storage**: Stored in `./qdrant_data/`.
+- **SQLite Database**: Managed by the Go application in `./data/`.
+- **Qdrant Storage**: Persistence handled via `./qdrant_data/`.
 
 ## Verification
 
