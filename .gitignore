@@ -1,0 +1,21 @@
+# Binaries
+lges-mem0ai-go
+server
+
+# Environment
+.env
+
+# Data
+data/
+
+# IDE
+.idea/
+.vscode/
+# OS
+.DS_Store
+
+# Large assets
+release/
+qdrant_data/
+models/
+!models.tar.gz.part_*
