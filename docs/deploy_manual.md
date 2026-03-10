@@ -5,30 +5,22 @@ This document describes how to deploy the `lges-mem0ai-go` server as a standalon
 ## Prerequisites
 
 - Ubuntu 22.04 LTS
-- Podman and Podman-Compose
-- Internet access (for building images and downloading Qdrant)
+- Go 1.24+ (for building on host)
+- Internet access (for building/API keys)
 
 ## Installation
 
-1. **Install Podman and Podman-Compose** (if not already installed):
+1. **Configure Environment Variables**:
 
-   ```bash
-   sudo apt update
-   sudo apt install -y podman podman-compose
-   ```
-
-2. **Configure Environment Variables**:
-
-   Copy `.env.example` to `.env` and fill in your API keys and configuration.
+   Copy `.env.example` to `.env` and fill in your API keys.
 
    ```bash
    cp .env.example .env
-   # Edit .env with your preferred editor
    ```
 
-3. **Deploy the Services**:
+2. **Deploy the Services**:
 
-   Run the `run_prod.sh` script to build and start the services.
+   Run the `run_prod.sh` script to build and start the services on host.
 
    ```bash
    chmod +x *.sh
@@ -36,9 +28,9 @@ This document describes how to deploy the `lges-mem0ai-go` server as a standalon
    ```
 
    This will:
-   - Start the Qdrant service using `podman`.
    - Build the Go application binary on the host.
-   - Run the `lges-mem0ai-go` server in the background.
+   - Reconstitute models if they were split.
+   - Run the `lges-mem0ai-go` server in the background using SQLite for both data and vector storage.
 
 ## Managing the Application
 

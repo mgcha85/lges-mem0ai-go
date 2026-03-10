@@ -1,20 +1,15 @@
 #!/bin/bash
-# stop.sh - Stop host processes and Qdrant container
+# stop.sh - Stop host processes (No Podman/Docker)
 
 # 1. Stop Go Server
 if [ -f "server.pid" ]; then
     PID=$(cat server.pid)
-    echo "Stopping server (PID: $PID)..."
+    echo "Stopping lges-mem0ai-go server (PID: $PID)..."
     kill $PID || true
     rm server.pid
 else
-    echo "No server.pid found. Trying pkill..."
+    echo "No server.pid found. Attempting pkill..."
     pkill server || true
 fi
-
-# 2. Stop Qdrant Container
-echo "Stopping Qdrant container..."
-podman stop qdrant_server || true
-podman rm qdrant_server || true
 
 echo "All services stopped."
