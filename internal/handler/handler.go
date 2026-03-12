@@ -38,8 +38,9 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /health", h.HealthCheck)
 	mux.HandleFunc("GET /users", h.ListUsers)
 	mux.HandleFunc("GET /users/{employee_id}", h.GetUser)
-	mux.HandleFunc("GET /sessions/{session_id}", h.GetSession)
+	mux.HandleFunc("GET /sessions/{session_id}", h.GetSession) // Context in manual
 	mux.HandleFunc("POST /memory", h.AddMemory)
+	mux.HandleFunc("GET /memory/{employee_id}", h.GetUserAllMemories)
 	mux.HandleFunc("GET /memory/{employee_id}/{session_id}", h.GetAllMemories)
 	mux.HandleFunc("POST /memory/search", h.SearchMemory)
 	mux.HandleFunc("POST /chat", h.Chat)
@@ -55,10 +56,8 @@ func buildMemoryKey(employeeID, sessionID string) string {
 // === Health Check ===
 
 func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]string{
-		"status":  "ok",
-		"version": "2.0.0",
-	})
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }
 
 // === User Management ===
@@ -195,6 +194,26 @@ func (h *Handler) GetAllMemories(w http.ResponseWriter, r *http.Request) {
 	memories, err := h.service.GetAllMemories(memoryKey)
 	if err != nil {
 		log.Printf("Error getting memories: %v", err)
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	items := make([]models.MemoryItem, 0, len(memories))
+	for _, m := range memories {
+		items = append(items, models.MemoryItem{
+			ID:     m.ID,
+			Memory: m.Memory,
+		})
+	}
+	writeJSON(w, http.StatusOK, items)
+}
+
+func (h *Handler) GetUserAllMemories(w http.ResponseWriter, r *http.Request) {
+	employeeID := r.PathValue("employee_id")
+
+	memories, err := h.service.GetUserMemories(employeeID)
+	if err != nil {
+		log.Printf("Error getting user memories: %v", err)
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

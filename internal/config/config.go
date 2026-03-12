@@ -44,7 +44,7 @@ func Load(envFile string) *Config {
 	loadDotEnv(envFile)
 
 	execDir := filepath.Dir(envFile)
-	dataDir := filepath.Join(execDir, "data")
+	dataDir := getEnv("DATA_DIR", filepath.Join(execDir, "data"))
 	_ = os.MkdirAll(dataDir, 0o755)
 
 	homeDir, _ := os.UserHomeDir()
@@ -65,7 +65,7 @@ func Load(envFile string) *Config {
 		OnnxVocabPath: getEnv("ONNX_VOCAB_PATH", filepath.Join(mem0Dir, "models", "vocab.txt")),
 
 		VectorDBProvider: getEnv("VECTORDB_PROVIDER", "sqlite"),
-		VectorDBPath:     getEnv("VECTORDB_PATH", filepath.Join(mem0Dir, "vector.db")),
+		VectorDBPath:     getEnv("VECTORDB_PATH", filepath.Join(dataDir, "vector.db")),
 		CollectionName:   getEnv("COLLECTION_NAME", "lges-mem0ai-go"),
 
 		ServerPort: getEnvInt("SERVER_PORT", 8080),

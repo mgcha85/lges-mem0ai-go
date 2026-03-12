@@ -1,4 +1,5 @@
 #!/bin/bash
+# force_build_2204.sh - Final build script for Ubuntu 22.04 parity
 set -e
 
 echo "--- Cleaning up previous artifacts ---"
@@ -25,8 +26,6 @@ podman run --rm \
         export GOMODCACHE=/app/.cache/go-mod
         export CGO_ENABLED=1
         
-        # Ensure submodules/local dependencies are handled correctly
-        # The user has lges-mem0-go locally, we need to ensure its deps are vendored too
         go mod tidy
         go mod vendor
         
@@ -38,7 +37,7 @@ podman run --rm \
         ldd ./server | grep libc.so
         
         echo '--- Adjusting file ownership ---'
-        chown -R $USER_ID:$GROUP_ID vendor server go.mod go.sum .cache
+        chown -R $USER_ID:$GROUP_ID vendor server go.mod go.sum
         
         echo '--- Build in container finished successfully ---'
     "
