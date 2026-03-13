@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"path/filepath"
 	"strings"
 
 	"github.com/mgcha85/lges-mem0ai-go/internal/config"
@@ -55,13 +56,13 @@ func New(cfg *config.Config) (*MemoryService, error) {
 	var err error
 	switch cfg.VectorDBProvider {
 	case "sqlite":
-		vs, err = vectorstore.NewSQLiteStore(cfg.VectorDBPath, cfg.CollectionName, cfg.EmbeddingDims)
+		vs, err = vectorstore.NewSQLiteStore(filepath.Join(cfg.DataDir, "vector.db"), cfg.CollectionName, cfg.EmbeddingDims)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create sqlite vector store: %w", err)
 		}
 	default:
 		// Default to sqlite
-		vs, err = vectorstore.NewSQLiteStore(cfg.VectorDBPath, cfg.CollectionName, cfg.EmbeddingDims)
+		vs, err = vectorstore.NewSQLiteStore(filepath.Join(cfg.DataDir, "vector.db"), cfg.CollectionName, cfg.EmbeddingDims)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create sqlite vector store: %w", err)
 		}

@@ -21,13 +21,13 @@ type Config struct {
 	EmbeddingDims     int
 
 	// ONNX settings (when EmbeddingProvider == "onnx")
+	OnnxModel   string
 	OnnxModelDir  string // directory containing model.onnx + tokenizer.json
 	OnnxModelPath string // legacy: direct path to .onnx file
 	OnnxVocabPath string // legacy: direct path to vocab.txt
 
 	// VectorDB settings
 	VectorDBProvider string
-	VectorDBPath     string // For sqlite
 	CollectionName   string
 
 	// Server
@@ -47,9 +47,8 @@ func Load(envFile string) *Config {
 	dataDir := getEnv("DATA_DIR", filepath.Join(execDir, "data"))
 	_ = os.MkdirAll(dataDir, 0o755)
 
-	homeDir, _ := os.UserHomeDir()
-	mem0Dir := getEnv("MEM0_DIR", filepath.Join(homeDir, ".mem0-go"))
-	_ = os.MkdirAll(filepath.Join(mem0Dir, "models"), 0o755)
+	modelsDir := getEnv("MODELS_DIR", filepath.Join(execDir, "models"))
+	_ = os.MkdirAll(modelsDir, 0o755)
 
 	return &Config{
 		OpenAIAPIKey:  getEnv("OPENAI_API_KEY", ""),
@@ -60,12 +59,12 @@ func Load(envFile string) *Config {
 		EmbeddingModel:    getEnv("EMBEDDING_MODEL", "intfloat/multilingual-e5-small"),
 		EmbeddingDims:     getEnvInt("EMBEDDING_DIMS", 384),
 
-		OnnxModelDir:  getEnv("ONNX_MODEL_DIR", filepath.Join(execDir, "models", "multilingual-e5-small")),
-		OnnxModelPath: getEnv("ONNX_MODEL_PATH", filepath.Join(mem0Dir, "models", "all-MiniLM-L6-v2.onnx")),
-		OnnxVocabPath: getEnv("ONNX_VOCAB_PATH", filepath.Join(mem0Dir, "models", "vocab.txt")),
+		OnnxModel:     getEnv("ONNX_MODEL", "multilingual-e5-small"),
+		OnnxModelDir:  filepath.Join(modelsDir, getEnv("ONNX_MODEL", "multilingual-e5-small")),
+		OnnxModelPath: getEnv("ONNX_MODEL_PATH", filepath.Join(modelsDir, "all-MiniLM-L6-v2.onnx")),
+		OnnxVocabPath: getEnv("ONNX_VOCAB_PATH", filepath.Join(modelsDir, "vocab.txt")),
 
 		VectorDBProvider: getEnv("VECTORDB_PROVIDER", "sqlite"),
-		VectorDBPath:     getEnv("VECTORDB_PATH", filepath.Join(dataDir, "vector.db")),
 		CollectionName:   getEnv("COLLECTION_NAME", "lges-mem0ai-go"),
 
 		ServerPort: getEnvInt("SERVER_PORT", 8080),
