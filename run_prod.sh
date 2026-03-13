@@ -34,7 +34,8 @@ fi
 
 # 4. Run Server in background
 echo "Starting lges-mem0ai-go server (Pre-built binary for Ubuntu 22.04)..."
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export LD_LIBRARY_PATH="$SCRIPT_DIR/lib:$LD_LIBRARY_PATH"
 chmod +x ./server
 nohup ./server > server.log 2>&1 &
 echo $! > server.pid

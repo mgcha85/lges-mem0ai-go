@@ -4,16 +4,6 @@ github.com/google/uuid
 # github.com/mattn/go-sqlite3 v1.14.34
 ## explicit; go 1.19
 github.com/mattn/go-sqlite3
-# github.com/mem0ai/mem0-go v0.0.0 => ./lges-mem0-go
-## explicit; go 1.24.0
-github.com/mem0ai/mem0-go/pkg/config
-github.com/mem0ai/mem0-go/pkg/embeddings
-github.com/mem0ai/mem0-go/pkg/llm
-github.com/mem0ai/mem0-go/pkg/memory
-github.com/mem0ai/mem0-go/pkg/prompts
-github.com/mem0ai/mem0-go/pkg/store
-github.com/mem0ai/mem0-go/pkg/tokenizer
-github.com/mem0ai/mem0-go/pkg/vectorstore
 # github.com/qdrant/go-client v1.16.2
 ## explicit; go 1.24.0
 github.com/qdrant/go-client/qdrant
@@ -144,4 +134,3 @@ google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
-# github.com/mem0ai/mem0-go => ./lges-mem0-go

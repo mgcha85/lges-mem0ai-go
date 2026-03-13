@@ -13,7 +13,7 @@ import (
 	"github.com/mgcha85/lges-mem0ai-go/internal/models"
 	"github.com/mgcha85/lges-mem0ai-go/internal/service"
 
-	"github.com/mem0ai/mem0-go/pkg/llm"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/llm"
 	openai "github.com/sashabaranov/go-openai"
 )
 

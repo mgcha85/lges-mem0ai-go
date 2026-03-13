@@ -8,11 +8,11 @@ import (
 
 	"github.com/mgcha85/lges-mem0ai-go/internal/config"
 
-	"github.com/mem0ai/mem0-go/pkg/embeddings"
-	"github.com/mem0ai/mem0-go/pkg/llm"
-	"github.com/mem0ai/mem0-go/pkg/memory"
-	"github.com/mem0ai/mem0-go/pkg/store"
-	"github.com/mem0ai/mem0-go/pkg/vectorstore"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/embeddings"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/llm"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/memory"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/store"
+	"github.com/mgcha85/lges-mem0ai-go/pkg/vectorstore"
 	openai "github.com/sashabaranov/go-openai"
 )
 

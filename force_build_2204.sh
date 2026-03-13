@@ -2,9 +2,6 @@
 # force_build_2204.sh - Final build script for Ubuntu 22.04 parity
 set -e
 
-echo "--- Cleaning up previous artifacts ---"
-rm -rf vendor/ server .cache/
-
 echo "--- Starting Ubuntu 22.04 container for complete build and sync ---"
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
@@ -15,6 +12,9 @@ podman run --rm \
     docker.io/library/ubuntu:22.04 \
     /bin/bash -c "
         export DEBIAN_FRONTEND=noninteractive
+        echo '--- Cleaning up previous artifacts inside container ---'
+        rm -rf /app/vendor /app/server /app/.cache/
+        
         apt-get update && apt-get install -y wget gcc git libc6-dev ca-certificates
         
         echo '--- Installing Go 1.24 ---'
