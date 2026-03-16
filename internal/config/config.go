@@ -45,15 +45,8 @@ func Load(envFile string) *Config {
 
 	execDir := filepath.Dir(envFile)
 	dataDir := getEnv("DATA_DIR", filepath.Join(execDir, "data"))
-	if err := os.MkdirAll(dataDir, 0o755); err != nil {
-		// Log but continue - directory might already exist in a read-only mount
-		// Only fail if we can't search it later
-	}
 
 	modelsDir := getEnv("MODELS_DIR", filepath.Join(execDir, "models"))
-	if err := os.MkdirAll(modelsDir, 0o755); err != nil {
-		// Log but continue
-	}
 
 	return &Config{
 		OpenAIAPIKey:  getEnv("OPENAI_API_KEY", ""),

@@ -3,8 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"os"
-	"path/filepath"
 	"sync"
 	"time"
 
@@ -35,10 +33,7 @@ type Database struct {
 
 // New creates a new Database instance and initializes the schema.
 func New(dbPath string) (*Database, error) {
-	dir := filepath.Dir(dbPath)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return nil, fmt.Errorf("failed to create db directory: %w", err)
-	}
+	// Directory must exist (NAS)
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
