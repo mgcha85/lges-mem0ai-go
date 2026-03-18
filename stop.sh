@@ -11,17 +11,15 @@ if [ -f "$DATA_DIR/server.pid" ]; then
     PID_FILE="$DATA_DIR/server.pid"
 elif [ -f "/tmp/server.pid" ]; then
     PID_FILE="/tmp/server.pid"
-elif [ -f "server.pid" ]; then
-    PID_FILE="server.pid"
 fi
 
-if [ -n "$PID_FILE" ]; then
+if [ -n "$PID_FILE" ] && [ -f "$PID_FILE" ]; then
     PID=$(cat "$PID_FILE")
     echo "Stopping lges-mem0ai-go server (PID: $PID)..."
     kill $PID || true
     rm "$PID_FILE" 2>/dev/null || true
 else
-    echo "No server.pid found. Attempting pkill..."
+    echo "No PID file found. Using pkill server..."
     pkill server || true
 fi
 
