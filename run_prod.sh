@@ -18,26 +18,18 @@ if [ ! -f "./server" ]; then
     exit 1
 fi
 
-# 4. Run Server in background
+# 4. Run Server (Foreground for Container longevity)
 echo "Starting lges-mem0ai-go server..."
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export LD_LIBRARY_PATH="$SCRIPT_DIR/lib:$LD_LIBRARY_PATH"
 
-# Direct output to /dev/null to prevent nohup.out in read-only dir
-# Logs should be captured from stdout by the supervisor/container engine
-nohup ./server > /dev/null 2>&1 & 
-SERVER_PID=$!
-
-# Try to write PID to DATA_DIR (NAS), fallback to /tmp
-if ! echo $SERVER_PID > "$DATA_DIR/server.pid" 2>/dev/null; then
-    echo $SERVER_PID > "/tmp/server.pid"
-    echo "PID stored in /tmp/server.pid (DATA_DIR was not writable)"
-else
-    echo "PID stored in $DATA_DIR/server.pid"
-fi
+# The PID of this shell will be the PID of the server after 'exec'
+echo $$ > "$DATA_DIR/server.pid" 2>/dev/null || echo $$ > "/tmp/server.pid"
 
 echo "======================================"
-echo "Server started successfully (Read-Only Mode)!"
-echo "PID: $SERVER_PID"
-echo "Logs: Outputting to stdout (Check system logs)"
+echo "Server starting (Read-Only Mode)..."
+echo "Logs: Streaming to stdout/stderr"
 echo "======================================"
+
+# exec replaces the shell with the server process (PID 1 in containers)
+exec ./server
