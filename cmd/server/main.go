@@ -15,6 +15,12 @@ import (
 	"github.com/mgcha85/lges-mem0ai-go/internal/service"
 )
 
+// @title           lges-mem0ai-go API
+// @version         1.0
+// @description     Memory management API with LLM integration.
+// @host            localhost:8000
+// @BasePath        /
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("=== lges-mem0ai-go Server ===")

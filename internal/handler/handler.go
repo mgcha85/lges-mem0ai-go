@@ -15,6 +15,8 @@ import (
 
 	"github.com/mgcha85/lges-mem0ai-go/pkg/llm"
 	openai "github.com/sashabaranov/go-openai"
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/mgcha85/lges-mem0ai-go/docs"
 )
 
 // Handler holds dependencies for HTTP handlers.
@@ -35,6 +37,9 @@ func New(svc *service.MemoryService, db *database.Database, cfg *config.Config) 
 
 // RegisterRoutes registers all HTTP routes on the given mux.
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("GET /", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"), // Just a placeholder, will be served from root
+	))
 	mux.HandleFunc("GET /health", h.HealthCheck)
 	mux.HandleFunc("GET /users", h.ListUsers)
 	mux.HandleFunc("GET /users/{employee_id}", h.GetUser)
@@ -55,6 +60,13 @@ func buildMemoryKey(employeeID, sessionID string) string {
 
 // === Health Check ===
 
+// HealthCheck godoc
+// @Summary      Health check
+// @Description  Confirm that the server is up and running.
+// @Tags         system
+// @Produce      plain
+// @Success      200 {string} string "ok"
+// @Router       /health [get]
 func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
@@ -62,6 +74,14 @@ func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 
 // === User Management ===
 
+// ListUsers godoc
+// @Summary      List all users
+// @Description  Retrieve a list of all registered employees.
+// @Tags         users
+// @Produce      json
+// @Success      200 {array} models.UserInfo
+// @Failure      500 {object} models.ErrorResponse
+// @Router       /users [get]
 func (h *Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := h.db.ListAllUsers()
 	if err != nil {
@@ -148,6 +168,17 @@ func (h *Handler) GetSession(w http.ResponseWriter, r *http.Request) {
 
 // === Memory Operations ===
 
+// AddMemory godoc
+// @Summary      Add messages to memory
+// @Description  Extract and store meaningful information from new messages.
+// @Tags         memory
+// @Accept       json
+// @Produce      json
+// @Param        request body models.AddMemoryRequest true "Memory details"
+// @Success      200 {object} models.AddMemoryResponse
+// @Failure      400 {object} models.ErrorResponse
+// @Failure      500 {object} models.ErrorResponse
+// @Router       /memory [post]
 func (h *Handler) AddMemory(w http.ResponseWriter, r *http.Request) {
 	var req models.AddMemoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -228,6 +259,17 @@ func (h *Handler) GetUserAllMemories(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, items)
 }
 
+// SearchMemory godoc
+// @Summary      Search memories
+// @Description  Search for relevant memories based on a query.
+// @Tags         memory
+// @Accept       json
+// @Produce      json
+// @Param        request body models.SearchMemoryRequest true "Search query"
+// @Success      200 {object} models.SearchMemoryResponse
+// @Failure      400 {object} models.ErrorResponse
+// @Failure      500 {object} models.ErrorResponse
+// @Router       /memory/search [post]
 func (h *Handler) SearchMemory(w http.ResponseWriter, r *http.Request) {
 	var req models.SearchMemoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -261,6 +303,17 @@ func (h *Handler) SearchMemory(w http.ResponseWriter, r *http.Request) {
 
 // === Chat Endpoint ===
 
+// Chat godoc
+// @Summary      Chat with memory
+// @Description  Send a message and get a response contextualized by user memories.
+// @Tags         chat
+// @Accept       json
+// @Produce      json
+// @Param        request body models.ChatRequest true "Chat message"
+// @Success      200 {object} models.ChatResponse
+// @Failure      400 {object} models.ErrorResponse
+// @Failure      500 {object} models.ErrorResponse
+// @Router       /chat [post]
 func (h *Handler) Chat(w http.ResponseWriter, r *http.Request) {
 	var req models.ChatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

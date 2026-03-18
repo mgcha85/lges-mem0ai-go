@@ -1,0 +1,230 @@
+basePath: /
+definitions:
+  models.AddMemoryRequest:
+    type: object
+  models.AddMemoryResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.ChatRequest:
+    properties:
+      employee_id:
+        example: "12345"
+        type: string
+      message:
+        example: When is the lunch break?
+        type: string
+      session_id:
+        example: session_abc
+        type: string
+      user_name:
+        example: John Doe
+        type: string
+      user_position:
+        example: Developer
+        type: string
+    type: object
+  models.ChatResponse:
+    properties:
+      memories_used:
+        items:
+          $ref: '#/definitions/models.MemoryItem'
+        type: array
+      response:
+        type: string
+      user_info:
+        additionalProperties: true
+        type: object
+    type: object
+  models.ErrorResponse:
+    properties:
+      detail:
+        type: string
+    type: object
+  models.MemoryItem:
+    properties:
+      id:
+        type: string
+      memory:
+        type: string
+      metadata:
+        additionalProperties: true
+        type: object
+      score:
+        type: number
+    type: object
+  models.MessageItem:
+    properties:
+      content:
+        example: Hello, how are you?
+        type: string
+      role:
+        example: user
+        type: string
+    type: object
+  models.SearchMemoryRequest:
+    properties:
+      employee_id:
+        example: "12345"
+        type: string
+      limit:
+        example: 5
+        type: integer
+      query:
+        example: Working hours
+        type: string
+      session_id:
+        example: session_abc
+        type: string
+    type: object
+  models.SearchMemoryResponse:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/models.MemoryItem'
+        type: array
+    type: object
+  models.UserInfo:
+    properties:
+      created_at:
+        type: string
+      employee_id:
+        type: string
+      name:
+        type: string
+      position:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Memory management API with LLM integration.
+  title: lges-mem0ai-go API
+  version: "1.0"
+paths:
+  /chat:
+    post:
+      consumes:
+      - application/json
+      description: Send a message and get a response contextualized by user memories.
+      parameters:
+      - description: Chat message
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Chat with memory
+      tags:
+      - chat
+  /health:
+    get:
+      description: Confirm that the server is up and running.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - system
+  /memory:
+    post:
+      consumes:
+      - application/json
+      description: Extract and store meaningful information from new messages.
+      parameters:
+      - description: Memory details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddMemoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AddMemoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Add messages to memory
+      tags:
+      - memory
+  /memory/search:
+    post:
+      consumes:
+      - application/json
+      description: Search for relevant memories based on a query.
+      parameters:
+      - description: Search query
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SearchMemoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SearchMemoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Search memories
+      tags:
+      - memory
+  /users:
+    get:
+      description: Retrieve a list of all registered employees.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.UserInfo'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: List all users
+      tags:
+      - users
+swagger: "2.0"
