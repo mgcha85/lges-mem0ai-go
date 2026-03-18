@@ -57,7 +57,7 @@ func buildMemoryKey(employeeID, sessionID string) string {
 
 func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	w.Write([]byte("ok"))
 }
 
 // === User Management ===
