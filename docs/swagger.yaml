@@ -1,6 +1,20 @@
 basePath: /
 definitions:
   models.AddMemoryRequest:
+    properties:
+      employee_id:
+        example: "12345"
+        type: string
+      messages:
+        items:
+          $ref: '#/definitions/models.MessageItem'
+        type: array
+      metadata:
+        additionalProperties: true
+        type: object
+      session_id:
+        example: session_abc
+        type: string
     type: object
   models.AddMemoryResponse:
     properties:

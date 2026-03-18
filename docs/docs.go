@@ -205,7 +205,27 @@ const docTemplate = `{
     },
     "definitions": {
         "models.AddMemoryRequest": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "employee_id": {
+                    "type": "string",
+                    "example": "12345"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MessageItem"
+                    }
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "session_id": {
+                    "type": "string",
+                    "example": "session_abc"
+                }
+            }
         },
         "models.AddMemoryResponse": {
             "type": "object",
@@ -362,8 +382,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "Memory management API with LLM integration.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {
